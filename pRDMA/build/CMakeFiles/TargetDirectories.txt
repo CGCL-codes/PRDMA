@@ -1,0 +1,12 @@
+/home/hdlu/model_test/nnew_client/build/CMakeFiles/rebuild_cache.dir
+/home/hdlu/model_test/nnew_client/build/CMakeFiles/edit_cache.dir
+/home/hdlu/model_test/nnew_client/build/src/CMakeFiles/rebuild_cache.dir
+/home/hdlu/model_test/nnew_client/build/src/CMakeFiles/edit_cache.dir
+/home/hdlu/model_test/nnew_client/build/src/CMakeFiles/dhmp.dir
+/home/hdlu/model_test/nnew_client/build/test/CMakeFiles/edit_cache.dir
+/home/hdlu/model_test/nnew_client/build/test/CMakeFiles/client_95.dir
+/home/hdlu/model_test/nnew_client/build/test/CMakeFiles/rebuild_cache.dir
+/home/hdlu/model_test/nnew_client/build/test/CMakeFiles/client_unif.dir
+/home/hdlu/model_test/nnew_client/build/test/CMakeFiles/client_5.dir
+/home/hdlu/model_test/nnew_client/build/test/CMakeFiles/server.dir
+/home/hdlu/model_test/nnew_client/build/test/CMakeFiles/client.dir
