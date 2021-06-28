@@ -1,2 +1,0 @@
-/usr/bin/ar qc ../../lib/libdhmp.a CMakeFiles/dhmp.dir/dhmp_client.c.o CMakeFiles/dhmp.dir/dhmp_config.c.o CMakeFiles/dhmp.dir/dhmp_context.c.o CMakeFiles/dhmp.dir/dhmp_dev.c.o CMakeFiles/dhmp.dir/dhmp_hash.c.o CMakeFiles/dhmp.dir/dhmp_log.c.o CMakeFiles/dhmp.dir/dhmp_server.c.o CMakeFiles/dhmp.dir/dhmp_task.c.o CMakeFiles/dhmp.dir/dhmp_timerfd.c.o CMakeFiles/dhmp.dir/dhmp_transport.c.o CMakeFiles/dhmp.dir/dhmp_work.c.o CMakeFiles/dhmp.dir/murmur3_hash.c.o
-/usr/bin/ranlib ../../lib/libdhmp.a

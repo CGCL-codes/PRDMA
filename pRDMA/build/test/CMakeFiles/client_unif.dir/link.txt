@@ -1,1 +1,0 @@
-/usr/bin/cc -msse2 -rdynamic CMakeFiles/client_unif.dir/client_unif.c.o -o ../../bin/client_unif   -L/home/rdma_match/xinzh/lib  -Wl,-rpath,/home/rdma_match/xinzh/lib ../../lib/libdhmp.a -lxml2 -lpthread -lrdmacm -libverbs -lnuma -lrt -lm -ljson-c 
