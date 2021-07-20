@@ -18,6 +18,7 @@ unsigned long task_time_diff_ns_1 = 0;
 
 static void show( struct timespec* time, char output, unsigned long *result)
 {
+return;
 	clock_gettime(CLOCK_MONOTONIC, time);	
 	if(output == 1)
 	{
@@ -444,13 +445,6 @@ int amper_scalable_work_handler(struct dhmp_work *work)
 	INFO_LOG("poll on %p",valid);
 	while(*valid== 0);
 
-/*
-clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime  %lf ms\n",(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
-*/
 	if(wwork->flag_write == 0)
 	{
 		temp = client->scaleRPC.Cdata_mr->addr;
@@ -541,13 +535,6 @@ INFO_LOG("write size = %d",head_size);
 	reply += wwork->length + sizeof(size_t);
 	INFO_LOG("wait for server!=%p %d",reply,wwork->length + sizeof(size_t));
 	while(*(char*)reply == 0);
-/*
-clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime %d %lf ms\n",counter++,(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
-*/
 	INFO_LOG("Get reply!");
 	if(wwork->flag_write == 1)
 	{
@@ -562,8 +549,6 @@ task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 100000000
 	}
 	*(size_t*)reply = 0;
 	wwork->done_flag=true;
-	//fprintf(stderr,"runtime write = %lf read = %lf ms\n", (double)(write_time)/1000000,(double)(read_time)/1000000);
-  	//fflush(stderr);
 }
 
 
@@ -572,7 +557,6 @@ int amper_herd_work_handler(struct dhmp_work *work)
 	
 }
 
-int farm_flag = 0;
 int amper_FaRM_work_handler(struct dhmp_work *work)   
 {
 	struct amper_L5_work *wwork;
@@ -619,9 +603,8 @@ int amper_FaRM_work_handler(struct dhmp_work *work)
 	sge.addr= ( uintptr_t ) client->FaRM.local_mr[wwork->cur]->addr;
 	sge.length= head_size;
 	sge.lkey= client->FaRM.local_mr[wwork->cur]->lkey;
+	INFO_LOG("send_wr.wr.rdma.remote_addr = %p %d %d",send_wr.wr.rdma.remote_addr, wwork->cur,buffer_size);
 
-clock_gettime(CLOCK_MONOTONIC, &task_time_start_1);
-//task_time_start_2[client->FaRM.Ccur] = task_time_start_1;
 	int err=ibv_post_send ( task->rdma_trans->qp, &send_wr, &bad_wr );
 	if ( err )
 	{
@@ -659,34 +642,10 @@ if(wwork->flag_write == 1)
 		pthread_mutex_lock(&client->mutex_request_num);
 		client->FaRM.is_available[wwork->cur] = 1;
 		pthread_mutex_unlock(&client->mutex_request_num);
-/*
-clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime %lf ms\n",(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
-*/
 }
 #endif
 	while(!task->done_flag);	
-
-
-{
-	size_t buffer_size =  sizeof(uintptr_t)*2 + sizeof(size_t) + 2 + client->FaRM.size;//(data)+dhmp_addr+local_addr+size+flag+valid
-char*        reply = client->FaRM.C_mr->addr + client->FaRM.size;
-     char*   valid = reply + (sizeof(uintptr_t)*2 + sizeof(size_t) + 1);
-	while(farm_flag == 0) ;//INFO_LOG("poll on vallid =%p",valid);
-	clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-
-         task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-                fprintf(stderr,"runtime %d %lf ms\n",counter++,(double)task_time_diff_ns_1/1000000);
-                fflush(stderr);	
-}
-
-
 	free(task);
-farm_flag = 0;
 	wwork->done_flag=true;
 	
 }
@@ -702,9 +661,6 @@ void *FaRM_run_client()
 	size_t buffer_size =  sizeof(uintptr_t)*2 + sizeof(size_t) + 2 + client->FaRM.size;//(data)+dhmp_addr+local_addr+size+flag+valid
 	reply = client->FaRM.C_mr->addr + client->FaRM.size;
 	valid = reply + (sizeof(uintptr_t)*2 + sizeof(size_t) + 1);
-#if((defined WFLUSH) || (defined RFLUSH))
-//	valid = client->FaRM.C_mr->addr;
-#endif
 	while(1)
 	{
 		if(client->FaRM.size == 0)
@@ -726,34 +682,23 @@ void *FaRM_run_client()
 		}
 #endif
 		while(*valid == 0) ;//INFO_LOG("poll on vallid =%p",valid);
-	//	*valid = 0;
+		*valid = 0;
 		
 
 		local_addr = (void*)*(uintptr_t*)(reply + sizeof(uintptr_t));
 		write_flag = *(reply  + sizeof(uintptr_t)*2 + sizeof(size_t));
-		INFO_LOG("get reply %p flag = %d",local_addr,write_flag);
+		INFO_LOG("get reply %p flag = %d",local_addr,client->FaRM.Ccur);
 		if(write_flag == 0)
 			memcpy(local_addr , client->FaRM.C_mr->addr + buffer_size * client->FaRM.Ccur , client->FaRM.size);
 		pthread_mutex_lock(&client->mutex_request_num);
 		client->FaRM.is_available[client->FaRM.Ccur] = 1;
 		pthread_mutex_unlock(&client->mutex_request_num);
-
 #ifdef WFLUSH
 if(write_flag == 1)
 	client->FaRM.Ccur = (client->FaRM.Ccur + 1) % FaRM_buffer_NUM;
 	continue;
 #endif
-/*
-clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-
-         task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-                fprintf(stderr,"runtime %d %lf ms\n",counter++,(double)task_time_diff_ns_1/1000000);
-                fflush(stderr);
-*/
-farm_flag = 1;
-*valid = 0;
-		client->FaRM.Ccur = (client->FaRM.Ccur + 1) % FaRM_buffer_NUM;
+	//	client->FaRM.Ccur = (client->FaRM.Ccur + 1) % FaRM_buffer_NUM;
 
 	}
 	return;
@@ -935,12 +880,6 @@ if(wwork->flag_write == 1)
         pthread_mutex_unlock(&client->mutex_request_num);
 */
 
-/*clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime %lf ms\n",(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
-*/
 
 }
 
@@ -954,12 +893,6 @@ task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 100000000
 #ifndef SFLUSH
 	 while(!wwork->recv_flag);   //not wait recv here  ,wait for mutex_num-limit
 #endif
-/*	clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime %lf ms\n",(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
-*/
 	wwork->done_flag=true;
 }
 
@@ -1149,13 +1082,6 @@ int amper_RFP_work_handler(struct dhmp_work *work)
 		INFO_LOG("time = %d request = %d %p",*time, client->RFP.time,wwork->dhmp_addr);
 		if(*time != client->RFP.time) // init = 1
 			continue;
-	/*	
-		clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime %d %lf ms\n",counter++,(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
-*/
 		if(wwork->is_write == false)
                 {
                         memcpy(wwork->local_addr, client->per_ops_mr2->mr->addr + sizeof(size_t) + 1 , wwork->length);

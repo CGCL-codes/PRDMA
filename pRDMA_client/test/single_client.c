@@ -25,8 +25,8 @@ void show(const char * str, struct timespec* time)
 #ifdef taillantency
 	return;
 #endif
-	fprintf(stderr,str);	
-	fflush(stderr);
+//	fprintf(stderr,str);	
+//	fflush(stderr);
 	clock_gettime(CLOCK_MONOTONIC, time);	
 }
 
@@ -86,12 +86,8 @@ int main(int argc,char *argv[])
 	{
 		size=atoi(argv[1]);
 		objnum = obj_num_max - 5;//atoi(argv[2]);
-#ifdef taillantency
-		accessnum = 30000;//atoi(argv[3]);
-#else
-		accessnum = 300000;//atoi(argv[3]);
-#endif
-		write_part = atoi(argv[2]);
+		accessnum = atoi(argv[2]);
+		write_part = 0;
 	}
 	pick();
 	str=malloc(size+2);
@@ -153,7 +149,7 @@ m = (m+1)%2;
 	}
 	show(" ",&task_time_end);
 
-//	check_request(1);
+	check_request(1);
 #endif
 #ifdef RFP
 	for(i=0;i<objnum;i++)
@@ -230,13 +226,12 @@ m = (m+1)%2;
 
  task_time_diff_ns = ((task_time_end.tv_sec * 1000000000) + task_time_end.tv_nsec) -((task_time_start.tv_sec * 1000000000) + task_time_start.tv_nsec);
 	
-//	task_time_diff_ns = ((task_time_end.tv_sec * 1000000000) + task_time_end.tv_nsec);
-  	fprintf(stderr,"%lf\n",(double)task_time_diff_ns/1000000);
+  	fprintf(stderr,"%lf ms\n",(double)task_time_diff_ns/1000000);
 	fflush(stderr);
 
 
-	//	for(i=0;i<objnum;i++)	
-	//	dhmp_free(addr[i]);
+		for(i=0;i<objnum;i++)	
+		dhmp_free(addr[i]);
 	dhmp_client_destroy();
 
 	

@@ -29,42 +29,59 @@
 
 //#define taillantency taillantency
 
-#ifdef define L5_MODEL
+/* 
+#define L5_MODEL L5_MODEL
+#define RFP_MODEL RFP_MODEL
+#define OCTOPUS_MODEL OCTOPUS_MODEL
+#define SCALERPC_MODEL SCALERPC_MODEL
+#define DARPC_MODEL DARPC_MODEL
+#define FARM_MODEL FARM_MODEL
+#define SRFLUSHRPC_MODEL SRFLUSHRPC_MODEL
+#define SFLUSHRPC_MODEL SFLUSHRPC_MODEL
+#define WRFLUSHRPC_MODEL WRFLUSHRPC_MODEL
+#define WFLUSHRPC_MODEL WFLUSHRPC_MODEL
+*/
+
+#ifdef L5_MODEL
 #define L5 L5 
 #define FaRM_buffer_NUM 1 
 #endif
-#ifdef define RFP_MODEL
+#ifdef RFP_MODEL
 #define RFP RFP
 #define FaRM_buffer_NUM 1 
 #endif
-#ifdef define OCTOPUS_MODEL
+#ifdef OCTOPUS_MODEL
 #define octopus octopus
 #define FaRM_buffer_NUM 1 
 #endif
-#ifdef define SCALERPC_MODEL
+#ifdef SCALERPC_MODEL
 #define scaleRPC scaleRPC
 #define FaRM_buffer_NUM 1 
 #endif
-#ifdef define DARPC_MODEL
+#ifdef DARPC_MODEL
 #define DaRPC DaRPC
 #define FaRM_buffer_NUM 1 
 #endif
-#ifdef define SRFLUSHRPC_MODEL
+#ifdef FARM_MODEL
+#define FaRM FaRM
+#define FaRM_buffer_NUM 1
+#endif
+#ifdef SRFLUSHRPC_MODEL
 #define DaRPC DaRPC
 #define RFLUSH RFLUSH
 #define FaRM_buffer_NUM 4 
 #endif
-#ifdef define SFLUSHRPC_MODEL
+#ifdef SFLUSHRPC_MODEL
 #define DaRPC DaRPC
 #define SFLUSH SFLUSH
 #define FaRM_buffer_NUM 4 
 #endif
-#ifdef define WRFLUSHRPC_MODEL
+#ifdef WRFLUSHRPC_MODEL
 #define FaRM FaRM
 #define RFLUSH RFLUSH
 #define FaRM_buffer_NUM 4 
 #endif
-#ifdef define WFLUSHRPC_MODEL
+#ifdef WFLUSHRPC_MODEL
 #define FaRM FaRM
 #define WFLUSH WFLUSH
 #define FaRM_buffer_NUM 4 

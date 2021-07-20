@@ -2,9 +2,9 @@
 # aux_source_directory(. DIR_SRCS)
 set (CLIENT_SRCS client.c)
 set (YCSB_SRCS ycsb.c)
-set (ENRON_SRCS ycsb.c)
-set (DBLP_SRCS ycsb.c)
-set (WORD_SRCS ycsb.c)
+set (ENRON_SRCS enron.c)
+set (DBLP_SRCS dblp.c)
+set (WORD_SRCS word.c)
 
 #set (CMAKE_CXX_FLAGS "-Wall -lxml2 -lrdmacm -libverbs -lpthread -lnuma -lrt -lm")
 
@@ -13,11 +13,11 @@ set (WORD_SRCS ycsb.c)
 set (EXECUTABLE_OUTPUT_PATH ${DHMP_SOURCE_DIR}/bin)
 
 
-add_executable(client ${CLIENT_SRC })
-add_executable(ycsb ${YCSB_SRC })
-add_executable(enron ${ENRON_SRC })
-add_executable(dblp ${DBLP_SRCS })
-add_executable(word ${WORD_SRCS })
+add_executable(client ${CLIENT_SRCS})
+add_executable(ycsb ${YCSB_SRCS})
+add_executable(enron ${ENRON_SRCS})
+add_executable(dblp ${DBLP_SRCS})
+add_executable(word ${WORD_SRCS})
 
 
 target_link_libraries(client dhmp)

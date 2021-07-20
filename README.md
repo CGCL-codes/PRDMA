@@ -53,7 +53,7 @@ To run pRDMA, the entire project needs to be compiled. The project requires some
 </server>
 ```
 
-To use NVM as memory at the server, this project uses NVM in \textit{APP Direct Mode} and configures it as NUMA node using ndctl. The way to use NVM can be referred to a blog [How To Extend Volatile System Memory (RAM) using Persistent Memory on Linux](https://stevescargall.com/2019/07/09/how-to-extend-volatile-system-memory-ram-using-persistent-memory-on-linux/?tdsourcetag=s_pctim_aiomsg). The project use NVM in a NUMA node by default.
+To use NVM as memory at the server, this project uses NVM in \textit{APP Direct Mode} and configures it as NUMA node using ndctl. The way to use NVM can be referred to a blog [How To Extend Volatile System Memory (RAM) using Persistent Memory on Linux](https://stevescargall.com/2019/07/09/how-to-extend-volatile-system-memory-ram-using-persistent-memory-on-linux/?tdsourcetag=s_pctim_aiomsg). The project use NVM in a NUMA node by default. (Specifically, NUMA node 4 is used to store persistent data in code.)
 
 
 **3.2 Compiling** 
@@ -65,6 +65,10 @@ To use NVM as memory at the server, this project uses NVM in \textit{APP Direct 
 ```
 
 The executable <kbd>server</kbd> and <kbd>client</kbd> programs are generated in the folder <kbd>bin/</kbd>, and the server and client projects are packaged separately for convenience.
+
+**3.3 More**
+
+With Ubuntu system, the <kbd><bits/sigset.h></kbd> header should be changed to <kbd><bits/types/__sigset_t.h></kbd> in <kbd>include/sys/epoll.h</kbd> for correct compiling.
 
 ## 4. Running   
 The executable files can be found in the directories `pRDMA_client/bin` and `pRDMA_server/bin` directory.   
@@ -102,11 +106,11 @@ For the PageRank algorithm, pRDMA uses different graph datasets as follows. [Wor
 pRDMA runs YCSB as a latency-sensitive application, and uses time33 algorithm as the hash function. We extend YCSB-C, a branch to implement RPC communication interfaces.   
 &#160; &#160; &#160; &#160;The following commands are used to run different workloads of YCSB:
 ```
-[client node] ./ycsb [workload A-F] [Object Size in Byte] [Number of Accesses]      
+[client node] ./ycsb [workload A-F] 
 ```
-&#160; &#160; &#160; &#160;For example, the following command performs 300000 accesses to objects of 256 Byte for workload A:
+&#160; &#160; &#160; &#160;For example, the following command performs workload A with default configuration:
 ```
-[client node] ./ycsb A 256 300000
+[client node] ./ycsb A
 ```  
 **5.2 Micro-benchmark**  
 The experiments of pRDMA for micro-benchmark show the characteristics of diffident  RPCs under different runtime setups and RDMA communication models.
@@ -122,6 +126,7 @@ pRDMA implements several RPC transmission models of state-of-the-art RPC systems
 | octopus  | #define OCTOPUS_MODEL |
 | scaleRPC  | #define SCALERPC_MODEL |
 | DaRPC  | #define DARPC_MODEL |
+| FaRM  | #define FARM_MODEL |
 | SRFlush-RPC  | #define SRFLUSHRPC_MODEL |
 | SFlush-RPC  | #define SFLUSHRPC_MODEL |
 | WRFlush-RPC  | #define WRFLUSHRPC_MODEL |
@@ -160,5 +165,7 @@ To evaluate the performance of RPC models which use multiple senders to communic
 [client node] gcc -o NUM_client Nclient.c
 [client node] ./NUM_client
 ```
+
+
 
 
