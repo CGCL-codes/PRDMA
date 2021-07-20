@@ -66,7 +66,7 @@ void transport(void * remote_addr, void* buf_addr, size_t size , char flag)
 	globle = (uintptr_t) remote_addr;
 	local = (uintptr_t)buf_addr;
 #ifdef FaRM
-	model_FaRM(local, size,globle ,flag);
+	model_FaRM(buf_addr, size,remote_addr ,flag);
 #endif
 #ifdef scaleRPC
 	model_7_scalable(&globle, size, &local,flag , 1);
@@ -389,19 +389,20 @@ printf("alloc\n");
 
     clock_gettime(CLOCK_MONOTONIC, &task_time_start);
 
-int type=atoi(argv[1]);
-	printf("type = %d",type);
-    if(type == 1)
+//int type=atoi(argv[1]);
+    char type = argv[1][0];
+	printf("type = %c",type);
+    if(type == 'A')
     	workloada();
-    else if(type == 2)
+    else if(type == 'B')
     	workloadb();
-    else if(type == 3)
+    else if(type == 'C')
     	workloadc();
-    else if(type == 4)
+    else if(type == 'D')
     	workloadd();
-    else if(type == 5)
+    else if(type == 'E')
     	workloade();
-	else if(type == 6)
+	else if(type == 'F')
     	workloadf();
     clock_gettime(CLOCK_MONOTONIC, &task_time_end);
     task_time_diff_ns = ((task_time_end.tv_sec * 1000000000) + task_time_end.tv_nsec) -

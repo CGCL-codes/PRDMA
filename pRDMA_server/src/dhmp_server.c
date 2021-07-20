@@ -224,8 +224,6 @@ reply_size= sizeof(size_t) +1+size;
 	
 	server->L5_message[node_id].is_new = true;
 	free(task);
-//	fprintf(stderr,"runtime write = %lf read = %lf ms\n", (double)(write_time)/1000000,(double)(read_time)/1000000);
-  //	fflush(stderr);
 	return;
 }
 
@@ -241,14 +239,8 @@ void *L5_run(void * arg)
 		if((*((char *)(valid))) != 0)
 		{
 			INFO_LOG("get new L5 message %d",i);
-			clock_gettime(CLOCK_MONOTONIC, &task_time_start_1);
 			*((char *)(valid)) = 0;
 			amper_L5_request_handler(i);
-			clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime %lf ms\n",(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
 
 		}
 	}
@@ -378,15 +370,9 @@ void *RFP_run(void* arg1)
 		if(*poll_addr != 0)
 		{
 			*poll_addr = 0;
-		clock_gettime(CLOCK_MONOTONIC, &task_time_start_1);
 			INFO_LOG("get new RFP message %d",node_id);
 			amper_RFP_request_handler(node_id,size);
 
-		clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime %lf ms\n",(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
 
 		}
 	}
@@ -419,8 +405,6 @@ void *FaRM_run(void* arg1)
 		}
 		if(*valid == 0)
 			continue;
-
-//		clock_gettime(CLOCK_MONOTONIC, &task_time_start_1);
 
 		*valid = 0;
 		INFO_LOG("get new FaRM messge");
@@ -488,13 +472,6 @@ void *FaRM_run(void* arg1)
 	if(write_flag == 0)
 #endif
 	{
-/*
-clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime  %lf ms\n",(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
-*/
 		int err=ibv_post_send ( task->rdma_trans->qp, &send_wr, &bad_wr );
     if ( err )
     {
@@ -513,10 +490,13 @@ task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 100000000
 			memcpy(server_addr, server->FaRM[node_id].S_mr->addr + i * buffer_size, size);
 			_mm_clflush(server_addr);
 		}
-		i = (i + 1) % FaRM_buffer_NUM;
+#endif
+#ifdef WFLUSH
+	i = (i + 1) % FaRM_buffer_NUM;
 #endif
 		reply = server->FaRM[node_id].S_mr->addr + size + (i * buffer_size);
 		valid = reply + (sizeof(uintptr_t)*2 + sizeof(size_t) + 1);
+		INFO_LOG("%p",valid);
 	}
 
 	return;
@@ -775,7 +755,6 @@ void *scalable_run(void* arg1)
                         break;
 		if(*(char *)(server->scaleRPC[node_id].Sreq_mr->addr + head_size +3))
 		{
-			clock_gettime(CLOCK_MONOTONIC, &task_time_start_1);
 
 			addr = server->scaleRPC[node_id].Sreq_mr->addr + head_size;
 			addr[3] = 0;
@@ -783,11 +762,6 @@ void *scalable_run(void* arg1)
 			amper_scalable_request_handler(node_id, batch, *(addr), *(addr+2), size); 
 			INFO_LOG("start scaleRPC %p epoll", server->scaleRPC[node_id].Sreq_mr->addr + head_size +3);
 			
-			clock_gettime(CLOCK_MONOTONIC, &task_time_end_1);
-task_time_diff_ns_1 = task_time_diff_ns_1 + ((task_time_end_1.tv_sec * 1000000000) + task_time_end_1.tv_nsec) -
-                        ((task_time_start_1.tv_sec * 1000000000) + task_time_start_1.tv_nsec);
-        fprintf(stderr,"runtime %lf ms\n",(double)task_time_diff_ns_1/1000000);
-        fflush(stderr);
 
 		}
 	}

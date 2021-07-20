@@ -3,9 +3,9 @@
 #include <fcntl.h>
 #include <time.h>
 #include "dhmp.h"
-#define NODE_MAX 12000
-#define EDGE_MAX 75000
-#define node_num 10617
+#define NODE_MAX 70000
+#define EDGE_MAX 280000
+#define node_num 69244
 struct edge	
 {
 	int u;
@@ -35,8 +35,8 @@ struct parad obj_para;
 void amper_write(void* globle_addr, void*local_addr, size_t  size)
 {
 uintptr_t globle,local;
-globle = globle_addr;
-local = local_addr;
+globle = (uintptr_t)globle_addr;
+local = (uintptr_t)local_addr;
 #ifdef FaRM
 model_FaRM(local_addr, size,globle_addr ,1);
 #endif
@@ -61,8 +61,8 @@ model_4_RFP(size, local_addr,globle_addr, 1);
 void amper_read(void* globle_addr, void*local_addr, size_t  size)
 {
 uintptr_t globle,local;
-globle = globle_addr;
-local = local_addr;
+globle = (uintptr_t)globle_addr;
+local = (uintptr_t)local_addr;
 #ifdef RFP
 model_4_RFP(size, local_addr,globle_addr, 0);
 #endif
@@ -96,7 +96,7 @@ void pagerank()
 	int i,count ;
 	char StrLine[1024];
 
-	FILE *fp = fopen("/home/hdlu/wordassociation-2011","r");
+	FILE *fp = fopen("./enron","r");
 	dhmp_client_init(sizeof(struct parad ),0,0);
 	dhmp_malloc(sizeof(struct parad ), 10);
 size_t size= sizeof(struct parad );
@@ -202,6 +202,7 @@ amper_read(para[i], tpara, sizeof(struct parad));
 
 int main()
 {
+//system("ls enron");
 	pagerank();
 	return 0;
 }

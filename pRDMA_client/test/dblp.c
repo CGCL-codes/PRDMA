@@ -36,8 +36,8 @@ struct parad obj_para;
 void amper_write(void* globle_addr, void*local_addr, size_t  size)
 {
 uintptr_t globle,local;
-globle = globle_addr;
-local = local_addr;
+globle = (uintptr_t)globle_addr;
+local = (uintptr_t)local_addr;
 #ifdef FaRM
 //model_FaRM(str,size,addr[rand_num[i]],1);
 model_FaRM(local_addr, size,globle_addr ,1);
@@ -63,8 +63,8 @@ model_4_RFP(size, local_addr,globle_addr, 1);
 void amper_read(void* globle_addr, void*local_addr, size_t  size)
 {
 uintptr_t globle,local;
-globle = globle_addr;
-local = local_addr;
+globle = (uintptr_t)globle_addr;
+local = (uintptr_t)local_addr;
 #ifdef RFP
 model_4_RFP(size, local_addr,globle_addr, 0);
 #endif
@@ -97,7 +97,7 @@ void pagerank()
 	int i,count ;
 	char StrLine[2048];
 
-	FILE *fp = fopen("/home/hdlu/dblp-2010","r");
+	FILE *fp = fopen("./dblp-2010","r");
 	dhmp_client_init(sizeof(struct parad ),0,0);
 size_t size= sizeof(struct parad );
 //	dhmp_malloc(sizeof(struct parad ), 10);
@@ -207,8 +207,8 @@ fflush(stderr);
 	task_time_diff_ns = ((task_time_end.tv_sec * 1000000000) + task_time_end.tv_nsec) -
                         ((task_time_start.tv_sec * 1000000000) + task_time_start.tv_nsec);
 
-	printf("runtime %lf\n", (double)task_time_diff_ns/1000000);
-	 dhmp_client_destroy();
+	 fprintf(stderr,"\n**********************************************\n\n\tTotol running time = %lfms\n\n**********************************************\n\n\n",(double)task_time_diff_ns/1000000);
+	  dhmp_client_destroy();
 }
 
 int main()
