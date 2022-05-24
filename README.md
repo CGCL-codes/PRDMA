@@ -11,6 +11,23 @@ pRDMA implement the previous RDMA-based RPC transmission models for extensive co
 
 More detailed instructions on code compiling, running, and testing are elaborated in the following.
 
+## Cite PRDMA 
+If you use PRDMA, please cite our research paper published at SC 2021. [(LINK)](https://dl.acm.org/doi/10.1145/3458817.3476194)
+
+**Zhuohui Duan, Haodi Lu, Haikun Liu, Xiaofei Liao, Hai Jin, Yu Zhang, Song Wu, Hardware-supported remote persistence for distributed persistent memory, in: Proceedings of the 2021 International Conference for High Performance Computing, Networking, Storage and Analysis(SC), 2021**
+
+
+```javascript
+@inproceedings{duan2021pRDMA,
+  title={{Hardware-supported remote persistence for distributed persistent memory}},
+  author={Duan, Zhuohui and Lu, Haodi and Liu, Haikun and Liao, Xiaofei and Jin, Hai and Zhang, Yu and Wu, Song},
+  booktitle={Proceedings of the 2021 International Conference for High Performance Computing, Networking, Storage and Analysis(SC)},
+  pages={91:1--91:14},
+  year={2021},
+  organization={ACM}
+}
+```
+
 Code Structure, Dependencies, Compiling, and Running
 ------------
 ## 1. Code Structure
@@ -165,6 +182,8 @@ To evaluate the performance of RPC models which use multiple senders to communic
 [client node] gcc -o NUM_client Nclient.c
 [client node] ./NUM_client
 ```
+
+
 
 
 
