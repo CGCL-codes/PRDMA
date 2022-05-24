@@ -175,7 +175,7 @@ If you use PRDMA, please cite our research paper published at SC 2021. [(LINK)](
 
 ```javascript
 @inproceedings{duan2021pRDMA,
-  title={Hardware-supported remote persistence for distributed persistent memory},
+  title={{Hardware-supported remote persistence for distributed persistent memory}},
   author={Duan, Zhuohui and Lu, Haodi and Liu, Haikun and Liao, Xiaofei and Jin, Hai and Zhang, Yu and Wu, Song},
   booktitle={Proceedings of the 2021 International Conference for High Performance Computing, Networking, Storage and Analysis(SC)},
   pages={91:1--91:14},
